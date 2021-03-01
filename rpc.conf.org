@@ -1,0 +1,10 @@
+{
+	"rpcuser": "elementsrpc",
+	"rpcpassword": "password",
+	"rpcbind": "127.0.0.1",
+	"rpcport": 18447,
+	"mainchainrpcuser": "bitcoinrpc",
+	"mainchainrpcpassword": "password",
+	"mainchainrpchost": "127.0.0.1",
+	"mainchainrpcport": 18443
+}

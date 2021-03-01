@@ -15,6 +15,7 @@
   "dependencies": {
     "cfd-js": "github:cryptogarageinc/cfd-js#semver:^0.3.3",
     "ini": "^2.0.0",
+    "needle": "^2.5.2",
     "node-json-rpc2": "git+https://github.com/ko-matsu/node-json-rpc2#async_minimum",
     "readline-sync": "^1.4.10",
     "zlib": "^1.0.5"
