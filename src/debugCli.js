@@ -283,6 +283,60 @@ const decodesignature = async function() {
   console.log(sig);
 };
 
+const verifyEcSignature = async function() {
+  // parameter: '<sighash> <signature> <pubkey>',
+  let sighash = '';
+  if (process.argv.length < 4) {
+    sighash = await readInput('sighash > ');
+  } else {
+    sighash = process.argv[3];
+  }
+
+  let signature;
+  if (process.argv.length < 5) {
+    signature = await readInput('signature > ');
+  } else {
+    signature = process.argv[4];
+  }
+
+  let pubkey;
+  if (process.argv.length < 6) {
+    pubkey = await readInput('pubkey > ');
+  } else {
+    pubkey = process.argv[5];
+  }
+
+  let sig = signature;
+  if (sig.length >= 136) {
+    sig = await getResponse(cfdjs.DecodeDerSignatureToRaw({
+      signature: signature,
+    })).signature;
+  }
+  const amount = (isElements && (value.length === 66)) ? 0 : parseInt(value);
+  const valuecommitment = (isElements && (value.length === 66)) ? value : '';
+  const verifyInput = {
+    tx: tx,
+    isElements: isElements,
+    txin: {
+      txid: txid,
+      vout: parseInt(vout),
+      signature: sig,
+      pubkey: pubkey,
+      redeemScript: script,
+      amount: amount,
+      confidentialValueCommitment: valuecommitment,
+      hashType: hashType,
+    },
+  };
+  try {
+    getResponse(cfdjs.VerifySignature(verifyInput));
+    console.log('verify success.');
+  } catch (err) {
+    console.log('verify fail.');
+    console.log(err);
+  }
+};
+
 const verifysignature = async function() {
   // parameter: '<tx(or filename)> <txid> <vout> <signature> <pubkey> <script> <hashType> <value>',
   let tx = '';
@@ -1763,6 +1817,12 @@ const commandData = {
     alias: 'decsig',
     parameter: '<signature>',
     function: decodesignature,
+  },
+  verifyecsignature: {
+    name: 'verifyecsignature',
+    alias: 'verifyecsig',
+    parameter: '<sighash> <signature> <pubkey>',
+    function: verifyEcSignature,
   },
   verifysignature: {
     name: 'verifysignature',
